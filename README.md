@@ -38,4 +38,9 @@ https://rishabhkr-r111.github.io/Tourify-3D/
 
 <img width="956" alt="4" src="https://github.com/rishabhkr-r111/Tourify-3D/assets/117273351/f164602b-7d59-4562-93e4-b7b03cf87b59">
 
+## Video Demo
+
+[![Demo Video](https://i3.ytimg.com/vi/6lge8y-4Eto/maxresdefault.jpg)](https://youtu.be/6lge8y-4Eto)
+
+
 
