@@ -21,7 +21,21 @@ To install Tourify 3D, follow these steps:
 - Customizable tours with explanations, highlights, and interactions.
 - Seamless navigation within the 3D environment using Three.js.
 
+## Demo Link
+
+https://rishabhkr-r111.github.io/Tourify-3D/
+
+## Screenshots
+
+<img width="959" alt="1" src="https://github.com/rishabhkr-r111/Tourify-3D/assets/117273351/ae340c4c-bf54-43ce-812d-f73432c499c6">
 
 
+<img width="959" alt="2" src="https://github.com/rishabhkr-r111/Tourify-3D/assets/117273351/838cbad8-f7c7-46e5-8b51-565b249dd0dc">
+
+
+<img width="959" alt="3" src="https://github.com/rishabhkr-r111/Tourify-3D/assets/117273351/ed6de7e9-9d74-4e89-9ba3-15e135d90405">
+
+
+<img width="956" alt="4" src="https://github.com/rishabhkr-r111/Tourify-3D/assets/117273351/f164602b-7d59-4562-93e4-b7b03cf87b59">
 
 
