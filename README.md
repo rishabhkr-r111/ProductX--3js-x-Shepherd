@@ -13,6 +13,7 @@ To install Tourify 3D, follow these steps:
 1. Clone the repository: `git clone https://github.com/rishabhkr-r111/Tourify-3D.git`
 2. Navigate to the project directory: `cd Tourify-3D`
 3. Install dependencies: `npm install`
+4. Run: `npm run dev`
 
 ## Features
 
