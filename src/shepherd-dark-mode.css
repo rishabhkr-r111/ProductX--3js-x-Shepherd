@@ -1,0 +1,54 @@
+.shepherd-theme-dark .shepherd-element {
+  background-color: #121212;
+  color: #ffffff;
+  border: none;
+}
+
+.shepherd-theme-dark .shepherd-header {
+  background-color: #121212;
+  color: #ffffff;
+  padding: 16px;
+  font-size: 1.25em;
+  border-bottom: 1px solid #121212;
+}
+
+.shepherd-theme-dark .shepherd-text {
+  color: #bdbdbd;
+  padding: 16px;
+  font-size: 1em;
+  background-color: #121212;
+}
+
+.shepherd-theme-dark .shepherd-footer {
+  background-color: #121212;
+  padding: 16px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.shepherd-theme-dark .shepherd-button {
+  background-color: #6200ee;
+  color: #ffffff;
+  border: none;
+  padding: 8px 16px;
+  margin: 0 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  border-radius: 4px;
+}
+
+.shepherd-theme-dark .shepherd-button:hover {
+  background-color: #3700b3;
+}
+
+.shepherd-theme-dark .shepherd-cancel-icon {
+  color: #ffffff;
+}
+
+.shepherd-theme-dark .shepherd-arrow {
+  background-color: #121212;
+}
+
+.shepherd-theme-dark .shepherd-arrow::before {
+  background-color: #121212;
+}

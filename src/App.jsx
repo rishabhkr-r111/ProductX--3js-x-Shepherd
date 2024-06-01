@@ -3,31 +3,57 @@ import * as THREE from "three";
 import TrendingFlatIcon from "@mui/icons-material/TrendingFlat";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { useLoader } from "@react-three/fiber";
-import { Environment, OrbitControls, Text, Html } from "@react-three/drei";
+import { OrbitControls, Text, Html } from "@react-three/drei";
 import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader";
 import { MTLLoader } from "three/examples/jsm/loaders/MTLLoader";
 import { DDSLoader } from "three-stdlib";
-import { Suspense, useEffect, useRef, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useSpring, animated, easings } from "@react-spring/three";
+import NavBar from "./comp/navBar";
+import PosArr from "./consts";
 import Shepherd from "shepherd.js";
-import "shepherd.js/dist/css/shepherd.css";
+import "./shepherd-dark-mode.css";
 
 THREE.DefaultLoadingManager.addHandler(/\.dds$/i, new DDSLoader());
 
-const Scene = ({ setLoading, tour }) => {
-  const { camera } = useThree();
-  // useFrame(() => {
-  //   console.log(camera.position);
-  // });
+const Scene = () => {
+  const [tour, setTour] = useState(null);
+  const [starRotation, setStartRotation] = useState(false);
 
+  const { camera } = useThree();
+
+  const [springProps, setSpringProps] = useSpring(() => ({
+    position: PosArr[4].position,
+    rotation: PosArr[4].position,
+    config: {
+      duration: 2000,
+      easing: easings.easeInOutCubic,
+    },
+  }));
+
+  useFrame(() => {
+    if (starRotation) {
+      camera.position.set(...springProps.position.get());
+      camera.rotation.set(...springProps.rotation.get());
+    }
+  });
+
+  const rotateCamera = (pos) => {
+    return new Promise((resolve) => {
+      setSpringProps({
+        position: PosArr[pos].position,
+        rotation: PosArr[pos].rotation,
+        onRest: resolve,
+      });
+
+      setStartRotation(true);
+    });
+  };
   const materials = useLoader(MTLLoader, "mobile.mtl");
   const obj = useLoader(OBJLoader, "mobile.obj", (loader) => {
     materials.preload();
     loader.setMaterials(materials);
-    () => setLoading(false);
   });
-
-  console.log(obj);
 
   const initialPosition = [-2, -2, 0];
   const finalPosition = [0, 0, 0];
@@ -43,6 +69,90 @@ const Scene = ({ setLoading, tour }) => {
     },
   });
 
+  useEffect(() => {
+    const tourInstance = new Shepherd.Tour({
+      defaultStepOptions: {
+        cancelIcon: {
+          enabled: true,
+        },
+        classes: "shepherd-theme-dark",
+        scrollTo: { behavior: "smooth", block: "center" },
+      },
+      useModalOverlay: false,
+    });
+
+    tourInstance.addStep({
+      id: "feature1",
+      text: "Product Feature 1",
+      attachTo: { element: ".first", on: "right" },
+      buttons: [
+        {
+          text: "Next",
+          action: tourInstance.next,
+        },
+      ],
+      beforeShowPromise: () => {
+        return rotateCamera(0);
+      },
+    });
+
+    tourInstance.addStep({
+      id: "feature2",
+      text: "Product Feature 2",
+      attachTo: { element: ".second", on: "left" },
+      buttons: [
+        {
+          text: "Next",
+          action: tourInstance.next,
+        },
+      ],
+      beforeShowPromise: () => {
+        return rotateCamera(1);
+      },
+    });
+
+    tourInstance.addStep({
+      id: "feature3",
+      text: "Product feature 3",
+      attachTo: { element: ".third", on: "top" },
+      buttons: [
+        {
+          text: "Next",
+          action: tourInstance.next,
+        },
+      ],
+      beforeShowPromise: () => {
+        return rotateCamera(2);
+      },
+    });
+
+    tourInstance.addStep({
+      id: "end",
+      text: "Buy Now",
+      buttons: [
+        {
+          text: "Finish",
+          action: tourInstance.complete,
+        },
+      ],
+      beforeShowPromise: () => {
+        return rotateCamera(3);
+      },
+    });
+
+    tourInstance.on("complete", async () => {
+      await rotateCamera(4);
+      setStartRotation(false);
+    });
+
+    tourInstance.on("cancel", async () => {
+      await rotateCamera(4);
+      setStartRotation(false);
+    });
+
+    setTour(tourInstance);
+  }, [obj]);
+
   const handleTourStart = () => {
     tour.start();
   };
@@ -55,6 +165,15 @@ const Scene = ({ setLoading, tour }) => {
         position={position}
         rotation={rotation}
       />
+      <Html position={[0.0, 0.0, 0.0]}>
+        <div className="first"></div>
+      </Html>
+      <Html position={[0.0005, 0.0, 0.0]}>
+        <div className="second"></div>
+      </Html>
+      <Html position={[0.0, 0.00001, 0.0]}>
+        <div className="third"></div>
+      </Html>
       <Text
         position={[0.01, 0.01, 7]}
         rotation={[Math.PI, 0, Math.PI]}
@@ -62,6 +181,7 @@ const Scene = ({ setLoading, tour }) => {
         color="white"
         anchorX="center"
         anchorY="middle"
+        className="test"
       >
         Product X
       </Text>
@@ -76,86 +196,19 @@ const Scene = ({ setLoading, tour }) => {
 };
 
 export default function App() {
-  const [loading, setLoading] = useState(true);
-
-  const [tour, setTour] = useState(null);
-
-  useEffect(() => {
-    const tourInstance = new Shepherd.Tour({
-      defaultStepOptions: {
-        cancelIcon: {
-          enabled: true,
-        },
-        classes: "shepherd-theme-default",
-        scrollTo: { behavior: "smooth", block: "center" },
-      },
-      useModalOverlay: true,
-    });
-
-    tourInstance.addStep({
-      id: "start",
-      text: "This is the starting point of the tour.",
-      attachTo: { element: ".tour-button", on: "right" },
-      buttons: [
-        {
-          text: "Next",
-          action: tourInstance.next,
-        },
-      ],
-    });
-
-    tourInstance.addStep({
-      id: "feature1",
-      text: "This is feature 1 of the product.",
-      attachTo: { element: ".text", on: "top" },
-      buttons: [
-        {
-          text: "Next",
-          action: tourInstance.next,
-        },
-      ],
-    });
-
-    tourInstance.addStep({
-      id: "feature2",
-      text: "This is feature 2 of the product.",
-      attachTo: { element: ".feature2", on: "top" },
-      buttons: [
-        {
-          text: "Next",
-          action: tourInstance.next,
-        },
-      ],
-    });
-
-    setTour(tourInstance);
-  }, []);
-
   return (
     <div className="App">
-      <nav>
-        <div className="text">Product X</div>
-      </nav>
+      <NavBar />
       <Canvas
         camera={{
-          position: [
-            0.00012044802437093873, 0.00006352461885423019,
-            -0.0015611709999744413,
-          ],
+          position: PosArr[4].position,
           fov: 75,
         }}
       >
-        <Suspense
-          fallback={
-            <Html center>
-              <div className="loading-text">Loading...</div>
-            </Html>
-          }
-        >
+        <Suspense>
           <ambientLight intensity={0.5} />
           <OrbitControls />
-          <Scene setLoading={setLoading} tour={tour} />
-          {/* <Environment preset="studio" background /> */}
+          <Scene />
         </Suspense>
       </Canvas>
     </div>
